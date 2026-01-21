@@ -160,7 +160,7 @@ export default function Sending() {
         </div>
       )}
 
-      <Card className="w-full">
+      <Card className="w-full max-w-96">
         <CardHeader>
           <CardTitle>파일 보내기</CardTitle>
         </CardHeader>
@@ -169,10 +169,7 @@ export default function Sending() {
           <div
             onClick={open}
             className={cn(
-              'flex cursor-pointer flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed p-8 transition-colors',
-              isDragActive
-                ? 'border-primary bg-primary/5'
-                : 'border-muted-foreground/25 hover:border-muted-foreground/50'
+              'flex cursor-pointer flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed p-8 transition-colors border-muted-foreground/25 hover:border-muted-foreground/50'
             )}
           >
             <Upload className="size-10 text-muted-foreground" />
@@ -200,7 +197,11 @@ export default function Sending() {
           )}
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full" disabled={files.length === 0}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={files.length === 0}
+          >
             보내기
           </Button>
         </CardFooter>
