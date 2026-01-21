@@ -93,9 +93,10 @@ export default function Sending() {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop: handleDrop,
     multiple: true,
+    noClick: true, // 클릭은 수동으로 처리
   });
 
   // 전역 드래그 이벤트 감지
@@ -141,13 +142,15 @@ export default function Sending() {
 
   return (
     <>
+      {/* 숨겨진 파일 input - open() 함수가 참조함 */}
+      <input {...getInputProps()} hidden />
+
       {/* 전역 드래그 오버레이 */}
       {isDraggingOverWindow && (
         <div
           {...getRootProps()}
           className="fixed inset-0 z-50 flex items-center justify-center bg-primary/10 backdrop-blur-sm"
         >
-          <input {...getInputProps()} />
           <div className="flex flex-col items-center gap-4 rounded-lg border-2 border-dashed border-primary p-8">
             <Upload className="size-16 text-primary" />
             <p className="text-xl font-medium text-primary">
@@ -164,7 +167,7 @@ export default function Sending() {
         <CardContent className="space-y-4">
           {/* 드롭존 영역 */}
           <div
-            {...getRootProps()}
+            onClick={open}
             className={cn(
               'flex cursor-pointer flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed p-8 transition-colors',
               isDragActive
@@ -172,7 +175,6 @@ export default function Sending() {
                 : 'border-muted-foreground/25 hover:border-muted-foreground/50'
             )}
           >
-            <input {...getInputProps()} />
             <Upload className="size-10 text-muted-foreground" />
             <div className="text-center">
               <p className="text-sm font-medium">
