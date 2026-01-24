@@ -93,6 +93,20 @@ export default function Sending() {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
+  const handleUpload = async () => {
+    const fetchURL = 'http://localhost:8080/api/upload';
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
+    const response = await fetch(fetchURL, {
+      method: 'POST',
+      body: formData,
+    });
+    const result = await response.json();
+    console.log(result);
+  };
+
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop: handleDrop,
     multiple: true,
@@ -201,6 +215,7 @@ export default function Sending() {
             type="submit"
             className="w-full"
             disabled={files.length === 0}
+            onClick={handleUpload}
           >
             보내기
           </Button>
