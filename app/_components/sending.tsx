@@ -9,10 +9,18 @@ import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+} from '@/components/ui/input-otp';
+import Link from 'next/link';
 
 // 추후 설정 가능한 제한 옵션
 // const FILE_UPLOAD_CONFIG = {
@@ -71,6 +79,9 @@ function FileListItem({ file, onRemove }: FileListItemProps) {
 }
 
 export default function Sending() {
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [shareCode, setShareCode] = useState('000000');
+  const [downloadUrl, setDownloadUrl] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const [isDraggingOverWindow, setIsDraggingOverWindow] = useState(false);
   const dragCounterRef = useRef(0);
@@ -105,6 +116,9 @@ export default function Sending() {
     });
     const result = await response.json();
     console.log(result);
+    setShareCode(result.shareCode);
+    setDownloadUrl(result.downloadUrl);
+    setUploadSuccess(true);
   };
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
@@ -115,6 +129,8 @@ export default function Sending() {
 
   // 전역 드래그 이벤트 감지
   useEffect(() => {
+    if (uploadSuccess) return; // 만약 업로드에 이미 성공했을 시 드래그 이벤트 적용 X
+
     const handleDragEnter = (e: DragEvent) => {
       e.preventDefault();
       dragCounterRef.current++;
@@ -152,7 +168,71 @@ export default function Sending() {
       window.removeEventListener('dragover', handleDragOver);
       window.removeEventListener('drop', handleDrop);
     };
-  }, []);
+  }, [uploadSuccess]);
+
+  if (uploadSuccess)
+    return (
+      <Card className="w-full max-w-96">
+        <CardHeader>
+          <CardTitle>업로드 성공</CardTitle>
+          <CardDescription>
+            받는 기기에서 6자리 숫자키를 입력하세요.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div
+            className="flex justify-center cursor-pointer transition-opacity hover:opacity-70"
+            title="클릭하여 코드 복사"
+          >
+            <InputOTP
+              maxLength={6}
+              value={shareCode}
+              readOnly
+              tabIndex={-1}
+              className="pointer-events-none caret-transparent cursor-pointer"
+            >
+              <InputOTPGroup
+                className="
+        *:data-[slot=input-otp-slot]:text-xl
+        *:data-[slot=input-otp-slot]:ring-0 
+        *:data-[slot=input-otp-slot]:border-border
+        *:data-[slot=input-otp-slot]:focus-visible:ring-0
+        *:data-[slot=input-otp-slot]:focus-visible:border-border
+      "
+              >
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+              </InputOTPGroup>
+
+              <InputOTPSeparator className="mx-2" />
+
+              <InputOTPGroup
+                className="
+        *:data-[slot=input-otp-slot]:text-xl
+        *:data-[slot=input-otp-slot]:ring-0 
+        *:data-[slot=input-otp-slot]:border-border
+        *:data-[slot=input-otp-slot]:focus-visible:ring-0
+        *:data-[slot=input-otp-slot]:focus-visible:border-border
+      "
+              >
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
+          </div>
+          <div>
+            <Link
+              href={downloadUrl}
+              className="text-xs text-muted-foreground underline"
+            >
+              {downloadUrl.substring(7)}
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    );
 
   return (
     <>
