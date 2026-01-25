@@ -203,19 +203,6 @@ export default function Sending() {
                 <InputOTPSlot index={0} />
                 <InputOTPSlot index={1} />
                 <InputOTPSlot index={2} />
-              </InputOTPGroup>
-
-              <InputOTPSeparator className="mx-2" />
-
-              <InputOTPGroup
-                className="
-        *:data-[slot=input-otp-slot]:text-xl
-        *:data-[slot=input-otp-slot]:ring-0 
-        *:data-[slot=input-otp-slot]:border-border
-        *:data-[slot=input-otp-slot]:focus-visible:ring-0
-        *:data-[slot=input-otp-slot]:focus-visible:border-border
-      "
-              >
                 <InputOTPSlot index={3} />
                 <InputOTPSlot index={4} />
                 <InputOTPSlot index={5} />
