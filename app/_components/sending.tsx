@@ -194,54 +194,77 @@ export default function Sending() {
         </div>
       )}
 
-      <Card className="w-full max-w-96">
-        <CardHeader>
-          <CardTitle>파일 보내기</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* 드롭존 영역 */}
-          <div
-            onClick={open}
-            className={cn(
-              'flex cursor-pointer flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed p-8 transition-colors border-muted-foreground/25 hover:border-muted-foreground/50'
-            )}
-          >
-            <Upload className="size-10 text-muted-foreground" />
-            <div className="text-center">
-              <p className="text-sm font-medium">
-                파일을 드래그하거나 클릭하여 선택
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                또는 화면 아무 곳에나 파일을 드래그하세요
-              </p>
-            </div>
-          </div>
-
-          {/* 파일 목록 */}
-          {files.length > 0 && (
-            <div className="space-y-2">
-              {files.map((file, index) => (
-                <FileListItem
-                  key={`${file.name}-${file.size}-${index}`}
-                  file={file}
-                  onRemove={() => handleRemoveFile(index)}
-                />
-              ))}
-            </div>
-          )}
-        </CardContent>
-        <CardFooter>
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={files.length === 0}
-            onClick={handleUpload}
-          >
-            보내기
-          </Button>
-        </CardFooter>
-      </Card>
+      <UploadCard
+        open={open}
+        files={files}
+        handleRemoveFile={handleRemoveFile}
+        handleUpload={handleUpload}
+      />
     </>
+  );
+}
+
+interface UploadCardProps {
+  open: () => void;
+  files: File[];
+  handleRemoveFile: (index: number) => void;
+  handleUpload: () => Promise<void>;
+}
+
+function UploadCard({
+  open,
+  files,
+  handleRemoveFile,
+  handleUpload,
+}: UploadCardProps) {
+  return (
+    <Card className="w-full max-w-96">
+      <CardHeader>
+        <CardTitle>파일 보내기</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* 드롭존 영역 */}
+        <div
+          onClick={open}
+          className={cn(
+            'flex cursor-pointer flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed p-8 transition-colors border-muted-foreground/25 hover:border-muted-foreground/50'
+          )}
+        >
+          <Upload className="size-10 text-muted-foreground" />
+          <div className="text-center">
+            <p className="text-sm font-medium">
+              파일을 드래그하거나 클릭하여 선택
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              또는 화면 아무 곳에나 파일을 드래그하세요
+            </p>
+          </div>
+        </div>
+
+        {/* 파일 목록 */}
+        {files.length > 0 && (
+          <div className="space-y-2">
+            {files.map((file, index) => (
+              <FileListItem
+                key={`${file.name}-${file.size}-${index}`}
+                file={file}
+                onRemove={() => handleRemoveFile(index)}
+              />
+            ))}
+          </div>
+        )}
+      </CardContent>
+      <CardFooter>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={files.length === 0}
+          onClick={handleUpload}
+        >
+          보내기
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }
 
