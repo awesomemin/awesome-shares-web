@@ -120,7 +120,7 @@ export default function Sending() {
     setUploadSuccess(true);
   };
 
-  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     onDrop: handleDrop,
     multiple: true,
     noClick: true, // 클릭은 수동으로 처리
@@ -171,53 +171,7 @@ export default function Sending() {
 
   if (uploadSuccess)
     return (
-      <Card className="w-full max-w-96">
-        <CardHeader>
-          <CardTitle>업로드 성공</CardTitle>
-          <CardDescription>
-            받는 기기에서 6자리 숫자키를 입력하세요.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div
-            className="flex justify-center cursor-pointer transition-opacity hover:opacity-70"
-            title="클릭하여 코드 복사"
-          >
-            <InputOTP
-              maxLength={6}
-              value={shareCode}
-              readOnly
-              tabIndex={-1}
-              className="pointer-events-none caret-transparent cursor-pointer"
-            >
-              <InputOTPGroup
-                className="
-        *:data-[slot=input-otp-slot]:text-xl
-        *:data-[slot=input-otp-slot]:ring-0 
-        *:data-[slot=input-otp-slot]:border-border
-        *:data-[slot=input-otp-slot]:focus-visible:ring-0
-        *:data-[slot=input-otp-slot]:focus-visible:border-border
-      "
-              >
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
-              </InputOTPGroup>
-            </InputOTP>
-          </div>
-          <div>
-            <Link
-              href={downloadUrl}
-              className="text-xs text-muted-foreground underline"
-            >
-              {downloadUrl.substring(7)}
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+      <UploadSuccessCard shareCode={shareCode} downloadUrl={downloadUrl} />
     );
 
   return (
@@ -288,5 +242,62 @@ export default function Sending() {
         </CardFooter>
       </Card>
     </>
+  );
+}
+
+interface UploadSuccessCardProps {
+  shareCode: string;
+  downloadUrl: string;
+}
+
+function UploadSuccessCard({ shareCode, downloadUrl }: UploadSuccessCardProps) {
+  return (
+    <Card className="w-full max-w-96">
+      <CardHeader>
+        <CardTitle>업로드 성공</CardTitle>
+        <CardDescription>
+          받는 기기에서 6자리 숫자키를 입력하세요.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div
+          className="flex justify-center cursor-pointer transition-opacity hover:opacity-70"
+          title="클릭하여 코드 복사"
+        >
+          <InputOTP
+            maxLength={6}
+            value={shareCode}
+            readOnly
+            tabIndex={-1}
+            className="pointer-events-none caret-transparent cursor-pointer"
+          >
+            <InputOTPGroup
+              className="
+                *:data-[slot=input-otp-slot]:text-xl
+                *:data-[slot=input-otp-slot]:ring-0 
+                *:data-[slot=input-otp-slot]:border-border
+                *:data-[slot=input-otp-slot]:focus-visible:ring-0
+                *:data-[slot=input-otp-slot]:focus-visible:border-border
+              "
+            >
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+        </div>
+        <div>
+          <Link
+            href={downloadUrl}
+            className="text-xs text-muted-foreground underline"
+          >
+            {downloadUrl.substring(7)}
+          </Link>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
