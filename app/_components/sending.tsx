@@ -41,42 +41,6 @@ function formatFileSize(bytes: number): string {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-interface FileListItemProps {
-  file: File;
-  onRemove: () => void;
-}
-
-function FileListItem({ file, onRemove }: FileListItemProps) {
-  const extension = getFileExtension(file.name);
-  const size = formatFileSize(file.size);
-
-  return (
-    <div className="flex items-center gap-3 rounded-lg border bg-card p-3">
-      <div className="flex size-10 items-center justify-center rounded-md bg-muted">
-        <FileIcon className="size-5 text-muted-foreground" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium">{file.name}</p>
-        <p className="text-xs text-muted-foreground">
-          {extension && <span className="uppercase">{extension}</span>}
-          {extension && ' • '}
-          {size}
-        </p>
-      </div>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={onRemove}
-        className="shrink-0 text-muted-foreground hover:text-destructive"
-      >
-        <X className="size-4" />
-        <span className="sr-only">파일 삭제</span>
-      </Button>
-    </div>
-  );
-}
-
 export default function Sending() {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [shareCode, setShareCode] = useState('000000');
@@ -265,6 +229,42 @@ function UploadCard({
         </Button>
       </CardFooter>
     </Card>
+  );
+}
+
+interface FileListItemProps {
+  file: File;
+  onRemove: () => void;
+}
+
+function FileListItem({ file, onRemove }: FileListItemProps) {
+  const extension = getFileExtension(file.name);
+  const size = formatFileSize(file.size);
+
+  return (
+    <div className="flex items-center gap-3 rounded-lg border bg-card p-3">
+      <div className="flex size-10 items-center justify-center rounded-md bg-muted">
+        <FileIcon className="size-5 text-muted-foreground" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium">{file.name}</p>
+        <p className="text-xs text-muted-foreground">
+          {extension && <span className="uppercase">{extension}</span>}
+          {extension && ' • '}
+          {size}
+        </p>
+      </div>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-sm"
+        onClick={onRemove}
+        className="shrink-0 text-muted-foreground hover:text-destructive"
+      >
+        <X className="size-4" />
+        <span className="sr-only">파일 삭제</span>
+      </Button>
+    </div>
   );
 }
 
