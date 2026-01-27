@@ -20,6 +20,7 @@ import {
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 import Link from 'next/link';
+import { formatFileSize, getFileExtension } from '@/lib/file';
 
 // 추후 설정 가능한 제한 옵션
 // const FILE_UPLOAD_CONFIG = {
@@ -27,19 +28,6 @@ import Link from 'next/link';
 //   maxSize: undefined,
 //   accept: undefined,
 // };
-
-function getFileExtension(filename: string): string {
-  const parts = filename.split('.');
-  return parts.length > 1 ? parts.pop()?.toUpperCase() || '' : '';
-}
-
-function formatFileSize(bytes: number): string {
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
 
 export default function Sending() {
   const [uploadSuccess, setUploadSuccess] = useState(false);
